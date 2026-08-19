@@ -43,60 +43,7 @@ test_loader = DataLoader(
 # =========================
 # 2. 定义模型
 # =========================
-
-class MLP(nn.Module):
-
-    def __init__(self):
-        super().__init__()
-
-        self.flatten = nn.Flatten()
-        self.fc1 = nn.Linear(28 * 28, 128)
-        self.relu = nn.ReLU()
-        self.fc2 = nn.Linear(128, 10)
-
-    def forward(self, x):
-
-        x = self.flatten(x)
-        x = self.fc1(x)
-        x = self.relu(x)
-        x = self.fc2(x)
-
-        return x
-
-
-class CNNSmall(nn.Module):
-
-    def __init__(self):
-        super().__init__()
-
-        self.conv1 = nn.Conv2d(
-            in_channels=1,
-            out_channels=16,
-            kernel_size=3,
-            padding=1
-        )
-
-        self.relu = nn.ReLU()
-
-        self.pool = nn.MaxPool2d(2)
-
-        self.flatten = nn.Flatten()
-
-        self.fc = nn.Linear(
-            16 * 14 * 14,
-            10
-        )
-
-    def forward(self, x):
-
-        x = self.conv1(x)
-        x = self.relu(x)
-        x = self.pool(x)
-        x = self.flatten(x)
-        x = self.fc(x)
-
-        return x
-
+from models import MLP, CNNSmall, CNNLarge
 
 # =========================
 # 3. Device
@@ -113,7 +60,7 @@ print("device:", device)
 # 4. 创建 CNN 模型
 # =========================
 
-model = CNNSmall().to(device)
+model = CNNLarge().to(device)
 
 
 # =========================
@@ -140,9 +87,9 @@ optimizer = torch.optim.SGD(
 os.makedirs("checkpoints", exist_ok=True)
 os.makedirs("results", exist_ok=True)
 
-checkpoint_path = "checkpoints/cnn_small_checkpoint.pth"
-model_path = "checkpoints/cnn_small.pth"
-history_path = "results/cnn_small_history.csv"
+checkpoint_path = "checkpoints/cnn_large_checkpoint.pth"
+model_path = "checkpoints/cnn_large.pth"
+history_path = "results/cnn_large_history.csv"
 
 
 # =========================
